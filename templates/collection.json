@@ -1,0 +1,130 @@
+{
+  "sections": {
+    "main-collection-banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_subcollections": true,
+        "bg_image": "shopify:\/\/shop_images\/main_header.png"
+      }
+    },
+    "main-collection-product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "collection_product_count": 12,
+        "collection_layout": "style1",
+        "collection_grid_num": 4,
+        "enable_filtering": false,
+        "enable_sorting": false,
+        "show_counts": false
+      }
+    },
+    "rich_text_6NYjiX": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_ekkEY8": {
+          "type": "heading",
+          "settings": {
+            "title": "Postbiotic Beverate",
+            "heading_size": "h2",
+            "title_color": "#1d439c",
+            "animation": ""
+          }
+        },
+        "text_K9YVxL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>",
+            "custom_liquid": "",
+            "text_color": "#1d439c",
+            "animation": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_ekkEY8",
+        "text_K9YVxL"
+      ],
+      "settings": {
+        "text_width": "medium",
+        "text_position": "center",
+        "text_alignment": "center",
+        "disable_top_spacing": false,
+        "disable_bottom_spacing": true
+      }
+    },
+    "multicolumn_j6qekx": {
+      "type": "multicolumn",
+      "blocks": {
+        "block_LWc4hK": {
+          "type": "block",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Apple_and_Rosemary_01.jpg",
+            "image_link": "shopify:\/\/products\/apple-rosemary",
+            "title": "Apple & Rosemary",
+            "text": "",
+            "text_alignment": "text-center",
+            "button-text": "",
+            "button-link": "",
+            "animation": "animation fade-in",
+            "heading_color": "#151515",
+            "text_color": "#444444",
+            "bg_color": "#fffdf6"
+          }
+        },
+        "block_QyDXGV": {
+          "type": "block",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/BlueberryandMint_01.jpg",
+            "image_link": "shopify:\/\/products\/blueberry-mint",
+            "title": "Blueberry & Mint",
+            "text": "",
+            "text_alignment": "text-center",
+            "button-text": "",
+            "button-link": "",
+            "animation": "animation fade-in",
+            "heading_color": "#151515",
+            "text_color": "#444444",
+            "bg_color": "rgba(0,0,0,0)"
+          }
+        },
+        "block_p9zmRd": {
+          "type": "block",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Lemon_and_Ginger_01.jpg",
+            "image_link": "shopify:\/\/products\/lemon-and-ginger",
+            "title": "Lemon and Ginger",
+            "text": "",
+            "text_alignment": "text-center",
+            "button-text": "",
+            "button-link": "",
+            "animation": "animation fade-in",
+            "heading_color": "#151515",
+            "text_color": "#444444",
+            "bg_color": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "block_LWc4hK",
+        "block_QyDXGV",
+        "block_p9zmRd"
+      ],
+      "settings": {
+        "full_width": true,
+        "padding": "",
+        "image_ratio": "adapt",
+        "mobile_swipe": false,
+        "disable_top_spacing": true,
+        "disable_bottom_spacing": false
+      }
+    }
+  },
+  "order": [
+    "main-collection-banner",
+    "main-collection-product-grid",
+    "rich_text_6NYjiX",
+    "multicolumn_j6qekx"
+  ]
+}

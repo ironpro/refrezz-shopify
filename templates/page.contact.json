@@ -1,0 +1,112 @@
+{
+  "sections": {
+    "map": {
+      "type": "map",
+      "blocks": {
+        "pin": {
+          "type": "pin",
+          "settings": {
+            "pin_retina": true,
+            "pin_lat": "40.67",
+            "pin_long": "-73.94",
+            "pin_title": "Pin Drop Heading",
+            "pin_desc": "Address description"
+          }
+        }
+      },
+      "block_order": [
+        "pin"
+      ],
+      "disabled": true,
+      "settings": {
+        "googlemaps_api_key": "",
+        "desktop_height": "desktop-height-450",
+        "mobile_height": "mobile-height-350",
+        "map_type": "roadmap",
+        "map_style_select": "default",
+        "map_zoom": 14,
+        "disable_top_spacing": true,
+        "disable_bottom_spacing": true
+      }
+    },
+    "image_with_text_VkgjMa": {
+      "type": "image-with-text",
+      "blocks": {
+        "title_3UtRGa": {
+          "type": "title",
+          "settings": {
+            "title": "Image with text",
+            "heading_size": "h2",
+            "color": "#151515",
+            "animation": ""
+          }
+        },
+        "text_iNbzHM": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "color": "#444444",
+            "animation": ""
+          }
+        },
+        "button_d3Hq4R": {
+          "type": "button",
+          "settings": {
+            "button_text": "Shop Now",
+            "button_link": "",
+            "button_style": "pill alt",
+            "button_color": "",
+            "animation": ""
+          }
+        }
+      },
+      "block_order": [
+        "title_3UtRGa",
+        "text_iNbzHM",
+        "button_d3Hq4R"
+      ],
+      "settings": {
+        "height": "adapt",
+        "full_width": false,
+        "direction": "image-right",
+        "text_alignment": "text-center",
+        "bg_color": "",
+        "disable_top_spacing": false,
+        "disable_bottom_spacing": false
+      }
+    },
+    "content": {
+      "type": "contact-form",
+      "blocks": {
+        "ead74d51-940e-498c-bbcc-e58bbc696f83": {
+          "type": "text",
+          "settings": {
+            "heading": "Heading",
+            "text": "<p>Add your store address or<br\/>your store hours<\/p>"
+          }
+        },
+        "9db50bfd-48cf-4fba-8b13-b3342c1b40c4": {
+          "type": "text",
+          "settings": {
+            "heading": "Heading",
+            "text": "<p>Add your store address or<br\/>your store hours<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "ead74d51-940e-498c-bbcc-e58bbc696f83",
+        "9db50bfd-48cf-4fba-8b13-b3342c1b40c4"
+      ],
+      "settings": {
+        "show_phone_number": false,
+        "disable_top_spacing": false,
+        "disable_bottom_spacing": false
+      }
+    }
+  },
+  "order": [
+    "map",
+    "image_with_text_VkgjMa",
+    "content"
+  ]
+}

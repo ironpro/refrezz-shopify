@@ -1,0 +1,90 @@
+{
+  "type": "header",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "signup_Ehb8Ph": {
+          "type": "signup",
+          "settings": {
+            "column_size": "medium",
+            "title": "",
+            "text": "<p>Sign up to our mailing list<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "signup_Ehb8Ph"
+      ],
+      "disabled": true,
+      "settings": {
+        "menu": "footer",
+        "copyright_text": "© 2025 Asahi Beverages America, Inc. | \"REFREZZ\" and \"CALPICO\" are trademarks of ASAHI SOFT DRINKS CO., LTD.",
+        "show_language_switcher": false,
+        "show_currency_switcher": false,
+        "show_payment_icons": false,
+        "show_social_icons": true
+      }
+    },
+    "new_footer_cPhzXW": {
+      "type": "new-footer",
+      "blocks": {
+        "custom_liquid_L4WBQa": {
+          "type": "custom_liquid",
+          "settings": {
+            "column_size": "medium",
+            "title": "",
+            "custom_liquid": ""
+          }
+        },
+        "signup_xtDbyF": {
+          "type": "signup",
+          "settings": {
+            "column_size": "medium",
+            "title": "",
+            "text": "<p>Add a text to attract more customers to <strong>sign up!<\/strong><\/p>"
+          }
+        },
+        "text_K3AraH": {
+          "type": "text",
+          "settings": {
+            "column_size": "medium",
+            "title": "",
+            "text": "<p>Add company info here.<\/p>",
+            "text_size": "small",
+            "button_text": "Explore",
+            "button_link": "",
+            "show_social_links": true
+          }
+        },
+        "menu_AafUbG": {
+          "type": "menu",
+          "settings": {
+            "column_size": "medium",
+            "title": "",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_L4WBQa",
+        "signup_xtDbyF",
+        "text_K3AraH",
+        "menu_AafUbG"
+      ],
+      "settings": {
+        "menu": "footer",
+        "copyright_text": "All rights reserved.",
+        "show_language_switcher": true,
+        "show_currency_switcher": true,
+        "show_payment_icons": true,
+        "show_social_icons": true
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "new_footer_cPhzXW"
+  ]
+}

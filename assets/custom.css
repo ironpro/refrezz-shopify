@@ -1,0 +1,18 @@
+/*------------------------------------------------------------------
+Css for Header
+*/
+.header.style5 .header-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.header.style5 .header-grid .logo-holder {
+    justify-content: start;
+}
+
+.header.style5 .full-menu .thb-full-menu {
+    justify-content: flex-end;
+}
+
+.header.style5 .header-grid {
+    align-items: flex-start;
+}

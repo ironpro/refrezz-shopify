@@ -1,0 +1,59 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "disabled": true,
+      "settings": {
+        "global_notification": true,
+        "global_notification_close": true,
+        "global_notification_homepage_only": false,
+        "global_notification_text": "Welcome to our store",
+        "global_notification_link": ""
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "megamenu_7UmqYY": {
+          "type": "megamenu",
+          "settings": {
+            "position": "8",
+            "promo_1_heading": "Promotion heading",
+            "promo_1_link": "",
+            "promo_2_heading": "Promotion heading",
+            "promo_2_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "megamenu_7UmqYY"
+      ],
+      "custom_css": [
+        "#quick_profile {display: none}"
+      ],
+      "settings": {
+        "sticky_header": true,
+        "logo": "shopify:\/\/shop_images\/refrezz_logo_with_transparent_bg_overlay.png",
+        "logo_height_range": 45,
+        "logo_height_range_mobile": 22,
+        "header_style": "header-style2",
+        "header_shadow": "header--shadow-medium",
+        "full_width": true,
+        "menu": "main-menu",
+        "transparent_header": true,
+        "logo_light": "shopify:\/\/shop_images\/refrezz_logo_with_transparent_bg.png",
+        "header_secondary_icons": true,
+        "header_search": false,
+        "show_language_switcher": false,
+        "show_currency_switcher": false,
+        "mobile_secondary_menu": "main-menu"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

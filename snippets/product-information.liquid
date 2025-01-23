@@ -1,0 +1,286 @@
+{%- liquid
+assign has_variant_picker = false
+assign variant_picker = section.blocks | where: "variant_picker"
+if variant_picker.size > 0
+    assign has_variant_picker = true
+endif
+assign product_form_id = 'product-form-' | append: section.id
+-%}
+<div class="summary entry-summary">
+	{% for block in section.blocks %}
+		{%- case block.type -%}
+			{%- when '@app' -%}
+					{% render block %}
+			{% when 'breadcrumbs' %}
+					{% render 'breadcrumbs' %}
+			{% when 'title' %}
+					<h1 class="product_title uppercase-{{ block.settings.uppercase }}" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+			{% when 'price' %}
+				<div class="product-price-container" {{ block.shopify_attributes }}>
+					<div class="no-js-hidden" id="price-{{ section.id }}">
+						{% render 'product-price', product: product, use_variant: true %}
+					</div>
+					{%- if section.settings.show_taxes_included != blank -%}
+						{%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+							<div class="product__tax caption">
+									{%- if cart.taxes_included -%}
+									{{ 'products.product.include_taxes' | t }}
+									{%- endif -%}
+									{%- if shop.shipping_policy.body != blank -%}
+									{{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+									{%- endif -%}
+							</div>
+						{%- endif -%}
+					{%- endif -%}
+				</div>
+
+			{% when 'rating' %}
+				{%- if product.metafields.reviews.rating.value != blank -%}
+						{% liquid assign rating = product.metafields.reviews.rating.value.rating | divided_by: product.metafields.reviews.rating.value.scale_max | times: 100 | append: '%' %}
+						<div class="star-rating-container" {{ block.shopify_attributes }}>
+								<div class="star-rating" role="img">
+										<span aria-hidden="true" style="width: {{ rating | escape }};"></span>
+								</div>
+								<p class="rating-count">
+										{{ 'products.product.reviews' | t: count: product.metafields.reviews.rating_count }}
+								</p>
+						</div>
+				{%- endif -%}
+			{% when 'description' %}
+					<div class="product-short-description rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
+			{% when 'inventory_level' %}
+			{% render 'product-inventory-notice', product: product, section: section, block: block %}
+			<link rel="stylesheet" href="{{ 'inventory-notice.css' | asset_url }}" media="print" onload="this.media='all'">
+			{% when 'variant_picker' %}
+				{%- unless product.has_only_default_variant -%}
+					{%- assign is_disabled = block.settings.variant_is_disabled -%}
+					{%- assign color_swatch_shape = block.settings.color_swatch_shape -%}
+					<variant-selects id="variant-selects-{{ section.id }}" class="no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" data-is-disabled="{{ is_disabled }}">
+						<div class="variations" {{ block.shopify_attributes }}>
+							<div class="js-product-options">
+								{%- for option in product.options_with_values -%}
+									{%- liquid
+										assign option_name = option.name | downcase | escape
+										assign option_type = block.settings.picker_type
+										assign swatch_count = option.values | map: 'swatch' | compact | size 
+										if block.settings.color_picker
+											if option_name contains 'color' or option_name contains 'colour' or option_name contains 'couleur' or option_name contains 'farbe'
+												assign option_type = 'color'
+											endif
+											# Additional swatch variant options set inside theme settings
+											assign color_swatches_variant_option = settings.color_swatches_variant_option | downcase | split: ', '
+
+											if color_swatches_variant_option contains option_name
+												assign option_type = 'color'
+											endif
+										endif
+
+										if swatch_count > 0
+											assign option_type = 'color'
+										endif
+									-%}
+									{%- liquid
+										assign option_slug = option_name | downcase
+										assign sizing_link = ''
+
+										assign sizing_guide_variant = block.settings.sizing_guide_variant | default: 'Size' | downcase
+									-%}
+									{%- if option_slug == sizing_guide_variant -%}
+										{%- if block.settings.sizing_guide_text != empty -%}
+											{%- capture sizing_link -%}
+												<modal-opener class="product-popup-modal__opener no-js-hidden" data-modal="#PopupModal-{{ block.id }}">
+													<button id="ProductPopup-{{ block.id }}" class="product-popup-modal__button" type="button" aria-haspopup="dialog"><span>{{ block.settings.sizing_guide_text }}</span></button>
+												</modal-opener>
+											{%- endcapture -%}
+											{%- capture sizing_popup -%}
+											<modal-dialog id="PopupModal-{{ block.id }}" class="product-popup-modal">
+												<div role="dialog" aria-label="{{ block.settings.sizing_guide_text }}" aria-modal="true" class="product-popup-modal__content" tabindex="-1">
+													<div class="product-popup-modal__content-header">
+														<h5>{{ block.settings.sizing_guide_page.title | default: block.settings.sizing_guide_text }}</h5>
+														<button id="ModalClose-{{ block.id }}" type="button" class="product-popup-modal__toggle" aria-label="{{ 'general.close' | t }}">{% render 'svg-icons' with 'thb-close' %}</button>
+													</div>
+													<scroll-shadow>
+														<div class="product-popup-modal__content-info">
+															{{ block.settings.sizing_guide_page.content }}
+														</div>
+													</scroll-shadow>
+												</div>
+											</modal-dialog>
+											{%- endcapture -%}
+										{%- endif -%}
+									{%- endif -%}
+									{%- render 'product-option', option_type: option_type, product: product, option: option, option_loop: forloop, product_form_id: product_form_id, sizing_link: sizing_link, color_swatch_shape: color_swatch_shape -%}
+								{%- endfor -%}
+								<input class="js-product-variant-id-input" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
+							</div>
+						</div>
+						<script type="application/json">
+							{{ product.variants | json }}
+						</script>
+					</variant-selects>
+				{%- endunless -%}
+				<noscript class="product-form__noscript-wrapper-{{ section.id }}">
+						<div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+								<label for="Variants-{{ section.id }}">{{ 'products.product.product_variants' | t }}</label>
+								<div class="select">
+										<select name="id" id="Variants-{{ section.id }}" class="select__select">
+												{%- for variant in product.variants -%}
+														<option {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %} {% if variant.available == false %}disabled{% endif %} value="{{ variant.id }}">
+																{{ variant.title }}
+																{%- if variant.available == false %} - {{ 'products.product.soldout' | t }}{% endif %}
+																- {{ variant.price | money | strip_html }}
+														</option>
+												{%- endfor -%}
+										</select>
+								</div>
+						</div>
+				</noscript>
+			{%- when 'side_panel' -%}
+				<div class="side-panel-links--container">
+					<side-panel-links class="side-panel-links side-panel-links--no-border no-js-hidden">
+						{%- if block.settings.side_panel_1_label != '' -%}
+						<button class="side-panel-links--link" data-id="1">{% render 'svg-icons-inline', icon: block.settings.side_panel_1_icon %}{{ block.settings.side_panel_1_label }}<span class="side-panel-links--arrow">{%- render 'svg-icons' with 'thb-sidepanel-right' -%}</span></button>
+						{%- endif -%}
+						{%- if block.settings.side_panel_2_label != '' -%}
+						<button class="side-panel-links--link" data-id="2">{% render 'svg-icons-inline', icon: block.settings.side_panel_2_icon %}{{ block.settings.side_panel_2_label }}<span class="side-panel-links--arrow">{%- render 'svg-icons' with 'thb-sidepanel-right' -%}</span></button>
+						{%- endif -%}
+						{%- if block.settings.side_panel_3_label != '' -%}
+						<button class="side-panel-links--link" data-id="3">{% render 'svg-icons-inline', icon: block.settings.side_panel_3_icon %}{{ block.settings.side_panel_3_label }}<span class="side-panel-links--arrow">{%- render 'svg-icons' with 'thb-sidepanel-right' -%}</span></button>
+						{%- endif -%}
+					</side-panel-links>
+					<link rel="stylesheet" href="{{ 'side-panel-links.css' | asset_url }}" media="print" onload="this.media='all'">
+				</div>
+			{% when 'buy_buttons' %}
+				<div {{ block.shopify_attributes }}>
+					{% render 'product-add-to-cart', product: product, form: form, product_form_id: product_form_id, block: block, pickup: pickup, has_variant_picker: has_variant_picker %}
+					{{ form | payment_terms }}
+				</div>
+			{% when 'share' %}
+				{% render 'social-share', share_title: product.title, share_permalink: product.url, share_image: product.featured_image %}
+			{% when 'meta' %}
+				{% render 'product-meta', product: product, product_meta_collections: block.settings.product_meta_collections, product_meta_tags: block.settings.product_meta_tags, product_meta_vendors: block.settings.product_meta_vendors, product_meta_sku: block.settings.product_meta_sku, section_id: section.id %}
+			{% when 'collapsible_tab' %}
+					<div class="thb-tab" {{ block.shopify_attributes }}>
+							<input type="checkbox" id="{{ section.id }}-tab-{{ block.id }}" {% if block.settings.open %}checked{% endif %}>
+							<label class="tab-label" for="{{ section.id }}-tab-{{ block.id }}">{{ block.settings.heading | default: block.settings.page.title }}<span class="thb-accordion-arrow"></span></label>
+							<div class="tab-content">
+									{{ block.settings.content }}
+									{{ block.settings.page.content }}
+									{{ block.settings.custom_liquid }}
+							</div>
+					</div>
+			{% when 'custom_liquid' %}
+					{{ block.settings.custom_liquid }}
+			{% when 'complementary' %}
+					<product-recommendations class="complementary-products no-js-hidden" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary">
+							{%- if recommendations.performed and recommendations.products_count > 0 -%}
+									<div class="complementary-products--inner product_list_widget">
+											{%- if block.settings.block_heading != blank -%}
+													<div class="complementary-products--heading">{{ block.settings.block_heading }}</div>
+											{%- endif -%}
+											{%- for product in recommendations.products limit: block.settings.product_list_limit -%}
+											<div class="mini_cart_item">
+													<div class="product-cart-item-image">
+															<a href="{{ product.url }}" title="{{ product.title | escape }}" class="cart-product-link">
+															{% if product.featured_media %}
+																	{%- render 'responsive-image', image: product.featured_media, sizes: '128x0' -%}
+															{% else %}
+																	<div class="thb-placeholder" style="width: 64px;">
+																			{{ 'product-1' | placeholder_svg_tag }}
+																	</div>
+															{% endif %}
+															</a>
+													</div>
+													<div class="mini_cart_item_content">
+															<a href="{{ product.url }}" title="{{ product.title | escape }}" class="cart-product-link">{{ product.title }}</a>
+															{% render 'product-price', product: product %}
+													</div>
+											</div>
+											{%- endfor -%}
+									</div>
+									<script src="{{ 'product-recommendations.min.js' | asset_url }}" defer="defer"></script>
+							{%- endif -%}
+					</product-recommendations>
+			{% when 'shipping_estimator' -%}
+				<div class="thb-tab" {{ block.shopify_attributes }}>
+					<input type="checkbox" id="{{ section.id }}-tab-{{ block.id }}" {% if block.settings.open %}checked{% endif %}>
+					<label class="tab-label" for="{{ section.id }}-tab-{{ block.id }}">{{- 'cart.shipping_estimator.estimate_shipping' | t -}}<span class="thb-accordion-arrow"></span></label>
+					<div class="tab-content">
+							{%- render 'shipping-estimator', section: section, shipping_estimator: block, in_product: true -%}
+					</div>
+				</div>
+			{% when 'custom_option' %}
+				{%- if block.settings.label != blank -%}
+					{%- liquid
+						assign line_item_input_id = product_form_id | append: '-custom-' | append: forloop.index
+						assign line_item_input_name = block.settings.label | escape | prepend: 'properties[' | append: ']'
+						assign required = block.settings.text_required
+						assign text_placeholder = block.settings.text_placeholder
+					-%}
+					<fieldset class="product-form__input product-information--line-item" {{ block.shopify_attributes}}>
+						{% case block.settings.type %}
+							{% when 'text' %}
+									<div class="form__label" for="{{ line_item_input_id }}">{{ block.settings.label | escape }}</div>
+									<input class="product-information--line-item--text full" type="text" id="{{ line_item_input_id }}" form="{{ product_form_id }}" name="{{ line_item_input_name }}" placeholder="{{ text_placeholder }}" form="{{ product_form_id }}" {% if required %}required{% endif %}>
+							{% when 'textarea' %}
+									<div class="form__label" for="{{ line_item_input_id }}">{{ block.settings.label | escape }}</div>
+									<textarea class="product-information--line-item--textarea full" id="{{ line_item_input_id }}" form="{{ product_form_id }}" name="{{ line_item_input_name }}" rows="3" placeholder="{{ text_placeholder }}" form="{{ product_form_id }}" {% if required %}required{% endif %}></textarea>
+							{% when 'checkbox' %}
+									<label class="label">
+										<input type="checkbox" class="custom-checkbox" form="{{ product_form_id }}" name="{{ line_item_input_name }}" value="{{ block.settings.checkbox_checked_value | escape }}" id="{{ line_item_input_id }}" {% if required %}required{% endif %}>
+										<span class="label__text-beside-input">{{ block.settings.label | escape }}</span>
+									</label>
+									<input type="hidden" form="{{ product_form_id }}" name="{{ line_item_input_name }}" value="{{ block.settings.checkbox_unchecked_value | escape }}">
+							{% when 'multiple' %}
+								{%- assign custom_options = block.settings.multiple_options | newline_to_br | strip_newlines | split: '<br />' -%}
+								<div class="form__label" for="{{ line_item_input_id }}">{{ block.settings.label | escape }}</div>
+								{% if block.settings.multiple_style == 'dropdown' %}
+									<div class="select">
+										<select name="{{ line_item_input_name }}" id="{{ line_item_input_id }}" form="{{ product_form_id }}">
+											{% for option in custom_options %}
+												<option value="{{ option | escape }}" {% if forloop.first %} selected{% endif %}>{{ option | escape }}</option>
+											{% endfor %}
+										</select>
+										<div class="select-arrow">{%- render 'svg-icons' with 'thb-select' -%}</div>
+									</div>
+								{% else %}
+									{% for option in custom_options %}
+										<label class="label">
+											<input type="radio" form="{{ product_form_id }}" name="{{ line_item_input_name }}" value="{{ option | escape }}"{% if forloop.first %} checked{% endif %}>
+											<span class="label__text-beside-input">{{ option | escape }}</span>
+										</label>
+									{% endfor %}
+								{% endif %}
+						{% endcase %}
+					</fieldset>
+				{%- endif -%}
+			{%- when 'fit_guide' -%}
+				<div class="product-fit-guide" style="--active-color: {{ block.settings.color_active_segment }};" {{ block.shopify_attributes }}>
+					{%- liquid
+						assign block_heading = block.settings.block_heading
+						assign label_active = block.settings.label_active | abs | at_most: 5 | at_least: 1
+						assign label_left = block.settings.label_left
+						assign label_middle = block.settings.label_middle
+						assign label_right = block.settings.label_right
+					-%}
+					{%- if block_heading != blank -%}<div class="product-fit-guide--heading">{{ block_heading }}</div>{%- endif -%}
+					<div class="product-fit-guide--lines">
+						{%- for i in (1..5) -%}
+						<div class="product-fit-guide--line{% if label_active == i %} product-fit-guide--line--active{%- endif -%}"></div>
+						{%- endfor -%}
+					</div>
+					<div class="product-fit-guide--labels">
+						<div class="product-fit-guide--label-left">{{ label_left }}</div>
+						{%- if label_middle != blank -%}<div class="product-fit-guide--label-middle">{{ label_middle }}</div>{%- endif -%}
+						<div class="product-fit-guide--label-right">{{ label_right }}</div>
+					</div>
+					<link rel="stylesheet" href="{{ 'product-fit.css' | asset_url }}" media="print" onload="this.media='all'">
+				</div>
+		{% endcase %}
+	{% endfor %}
+</div>
+
+{%- if sizing_popup != '' %}
+{{ 'sizing-popup.css' | asset_url | stylesheet_tag }}
+{{ sizing_popup }}
+{%- endif -%}
